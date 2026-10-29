@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="comprehensive_visit_report"
+              pageWidth="842" pageHeight="595" orientation="Landscape"
+              columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20"
+              uuid="a8b7c6d5-e4f3-2109-8765-43210fedcba9">
+
+    <!-- Dynamic Parameters -->
+    <parameter name="REPORT_TITLE" class="java.lang.String">
+        <defaultValueExpression><![CDATA["VetraNest - Comprehensive Clinical Visits & Appointments Report"]]></defaultValueExpression>
+    </parameter>
+    <parameter name="CLINIC_NAME" class="java.lang.String">
+        <defaultValueExpression><![CDATA["VetraNest Animal Hospital & Pet Care"]]></defaultValueExpression>
+    </parameter>
+    <parameter name="CLINIC_CONTACT" class="java.lang.String">
+        <defaultValueExpression><![CDATA["No. 124, Havelock Road, Colombo 05 | +94 11 234 5678 | info@vetranest.lk"]]></defaultValueExpression>
+    </parameter>
+
+    <!-- 4-Table JOIN SQL Query -->
+    <queryString>
+        <![CDATA[
+        SELECT 
+            a.appointment_id,
+            a.appointment_date,
+            a.time_slot,
+            a.service_type,
+            a.status,
+            c.name AS customer_name,
+            c.phone AS customer_phone,
+            p.pet_name,
+            p.species,
+            COALESCE(t.diagnosis, 'Pending Visit') AS diagnosis,
+            COALESCE(t.medication, 'None') AS medication
+        FROM appointments a
+        JOIN customers c ON a.customer_id = c.customer_id
+        JOIN pets p ON a.pet_id = p.pet_id
+        LEFT JOIN treatments t ON a.appointment_id = t.appointment_id
+        ORDER BY a.appointment_date DESC, a.appointment_id DESC
+        ]]>
+    </queryString>
+
+    <!-- Fields -->
+    <field name="appointment_id" class="java.lang.Integer"/>
+    <field name="appointment_date" class="java.sql.Date"/>
+    <field name="time_slot" class="java.lang.String"/>
+    <field name="service_type" class="java.lang.String"/>
+    <field name="status" class="java.lang.String"/>
+    <field name="customer_name" class="java.lang.String"/>
+    <field name="customer_phone" class="java.lang.String"/>
+    <field name="pet_name" class="java.lang.String"/>
+    <field name="species" class="java.lang.String"/>
+    <field name="diagnosis" class="java.lang.String"/>
+    <field name="medication" class="java.lang.String"/>
+
+    <variable name="TOTAL_RECORDS" class="java.lang.Integer" calculation="Count">
+        <variableExpression><![CDATA[$F{appointment_id}]]></variableExpression>
+    </variable>
+
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+
+    <!-- Title Section -->
+    <title>
+        <band height="75" splitType="Stretch">
+            <rectangle>
+                <reportElement mode="Opaque" x="0" y="0" width="802" height="68" backcolor="#1E1B4B" uuid="b1a2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"/>
+                <graphicElement>
+                    <pen lineWidth="0.0"/>
+                </graphicElement>
+            </rectangle>
+            <staticText>
+                <reportElement x="20" y="10" width="500" height="26" forecolor="#FFFFFF" uuid="d1e2f3a4-b5c6-7a8b-9c0d-1e2f3a4b5c6e"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="18" isBold="true"/>
+                </textElement>
+                <text><![CDATA[VetraNest | Comprehensive Patient & Visit Report]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="20" y="38" width="500" height="18" forecolor="#A5B4FC" uuid="e2f3a4b5-c6d7-8e9f-0a1b-2c3d4e5f6a7b"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="10"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{CLINIC_CONTACT}]]></textFieldExpression>
+            </textField>
+            <textField pattern="yyyy-MM-dd HH:mm">
+                <reportElement x="580" y="14" width="200" height="20" forecolor="#E0E7FF" uuid="f3a4b5c6-d7e8-9f0a-1b2c-3d4e5f6a7b8c"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="9"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Generated: " + new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm").format(new java.util.Date())]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="580" y="36" width="200" height="20" forecolor="#10B981" uuid="0a1b2c3d-4e5f-6a7b-8c9d-0e1f2a3b4c5d"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="10" isBold="true"/>
+                </textElement>
+                <text><![CDATA[NIBM EAD 1 Coursework Report]]></text>
+            </staticText>
+        </band>
+    </title>
+
+    <!-- Column Header -->
+    <columnHeader>
+        <band height="28" splitType="Stretch">
+            <rectangle>
+                <reportElement mode="Opaque" x="0" y="2" width="802" height="24" backcolor="#6C63FF" uuid="1b2c3d4e-5f6a-7b8c-9d0e-1f2a3b4c5d6e"/>
+                <graphicElement><pen lineWidth="0.0"/></graphicElement>
+            </rectangle>
+            <staticText>
+                <reportElement x="6" y="4" width="40" height="20" forecolor="#FFFFFF" uuid="2c3d4e5f-6a7b-8c9d-0e1f-2a3b4c5d6e7f"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="9" isBold="true"/>
+                </textElement>
+                <text><![CDATA[ID]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="50" y="4" width="65" height="20" forecolor="#FFFFFF" uuid="3d4e5f6a-7b8c-9d0e-1f2a-3b4c5d6e7f8a"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="9" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Date]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="120" y="4" width="80" height="20" forecolor="#FFFFFF" uuid="4e5f6a7b-8c9d-0e1f-2a3b-4c5d6e7f8a9b"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="9" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Time Slot]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="205" y="4" width="105" height="20" forecolor="#FFFFFF" uuid="5f6a7b8c-9d0e-1f2a-3b4c-5d6e7f8a9b0c"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="9" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Owner (Customer)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="315" y="4" width="95" height="20" forecolor="#FFFFFF" uuid="6a7b8c9d-0e1f-2a3b-4c5d-6e7f8a9b0c1d"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="9" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Pet (Species)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="415" y="4" width="90" height="20" forecolor="#FFFFFF" uuid="7b8c9d0e-1f2a-3b4c-5d6e-7f8a9b0c1d2e"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="9" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Service]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="510" y="4" width="65" height="20" forecolor="#FFFFFF" uuid="8c9d0e1f-2a3b-4c5d-6e7f-8a9b0c1d2e3f"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="9" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Status]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="580" y="4" width="115" height="20" forecolor="#FFFFFF" uuid="9d0e1f2a-3b4c-5d6e-7f8a-9b0c1d2e3f4a"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="9" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Diagnosis]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="700" y="4" width="98" height="20" forecolor="#FFFFFF" uuid="0e1f2a3b-4c5d-6e7f-8a9b-0c1d2e3f4a5b"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="9" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Prescription]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+
+    <!-- Detail Row -->
+    <detail>
+        <band height="24" splitType="Stretch">
+            <rectangle>
+                <reportElement mode="Opaque" x="0" y="0" width="802" height="23" backcolor="#F8FAFC" uuid="1f2a3b4c-5d6e-7f8a-9b0c-1d2e3f4a5b6c">
+                    <printWhenExpression><![CDATA[$V{REPORT_COUNT} % 2 == 0]]></printWhenExpression>
+                </reportElement>
+                <graphicElement><pen lineWidth="0.0"/></graphicElement>
+            </rectangle>
+            <textField>
+                <reportElement x="6" y="2" width="40" height="18" uuid="2a3b4c5d-6e7f-8a9b-0c1d-2e3f4a5b6c7d"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA["#" + $F{appointment_id}]]></textFieldExpression>
+            </textField>
+            <textField pattern="yyyy-MM-dd">
+                <reportElement x="50" y="2" width="65" height="18" uuid="3b4c5d6e-7f8a-9b0c-1d2e-3f4a5b6c7d8e"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{appointment_date}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="120" y="2" width="80" height="18" uuid="4c5d6e7f-8a9b-0c1d-2e3f-4a5b6c7d8e9f"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{time_slot}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="205" y="2" width="105" height="18" uuid="5d6e7f8a-9b0c-1d2e-3f4a-5b6c7d8e9f0a"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{customer_name}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="315" y="2" width="95" height="18" uuid="6e7f8a9b-0c1d-2e3f-4a5b-6c7d8e9f0a1b"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{pet_name} + " (" + $F{species} + ")"]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="415" y="2" width="90" height="18" uuid="7f8a9b0c-1d2e-3f4a-5b6c-7d8e9f0a1b2c"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{service_type}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="510" y="2" width="65" height="18" uuid="8a9b0c1d-2e3f-4a5b-6c7d-8e9f0a1b2c3d"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="580" y="2" width="115" height="18" uuid="9b0c1d2e-3f4a-5b6c-7d8e-9f0a1b2c3d4e"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{diagnosis}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="700" y="2" width="98" height="18" uuid="0c1d2e3f-4a5b-6c7d-8e9f-0a1b2c3d4e5f"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{medication}]]></textFieldExpression>
+            </textField>
+            <line>
+                <reportElement x="0" y="23" width="802" height="1" forecolor="#E2E8F0" uuid="a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6e"/>
+            </line>
+        </band>
+    </detail>
+
+    <!-- Page Footer -->
+    <pageFooter>
+        <band height="30" splitType="Stretch">
+            <line>
+                <reportElement x="0" y="4" width="802" height="1" forecolor="#CBD5E1" uuid="b2c3d4e5-f6a7-b8c9-d0e1-f2a3b4c5d6e7"/>
+            </line>
+            <staticText>
+                <reportElement x="10" y="8" width="300" height="18" forecolor="#64748B" uuid="c3d4e5f6-a7b8-c9d0-e1f2-a3b4c5d6e7f8"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8"/>
+                </textElement>
+                <text><![CDATA[VetraNest Veterinary Information System | Confidential Medical Record]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="680" y="8" width="80" height="18" forecolor="#64748B" uuid="d4e5f6a7-b8c9-d0e1-f2a3-b4c5d6e7f8a9"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER} + " of "]]></textFieldExpression>
+            </textField>
+            <textField evaluationTime="Report">
+                <reportElement x="760" y="8" width="30" height="18" forecolor="#64748B" uuid="e5f6a7b8-c9d0-e1f2-a3b4-c5d6e7f8a9b0"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+
+    <!-- Summary Band -->
+    <summary>
+        <band height="40" splitType="Stretch">
+            <rectangle>
+                <reportElement mode="Opaque" x="0" y="8" width="802" height="28" backcolor="#EEF2FF" uuid="f6a7b8c9-d0e1-f2a3-b4c5-d6e7f8a9b0c1"/>
+                <graphicElement><pen lineWidth="0.0"/></graphicElement>
+            </rectangle>
+            <textField>
+                <reportElement x="16" y="12" width="400" height="20" forecolor="#1E1B4B" uuid="a7b8c9d0-e1f2-a3b4-c5d6-e7f8a9b0c1d2"/>
+                <textElement verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="10" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Total Appointments & Patient Encounters: " + $V{TOTAL_RECORDS}]]></textFieldExpression>
+            </textField>
+        </band>
+    </summary>
+</jasperReport>

@@ -1,0 +1,46 @@
+# =============================================================================
+# VetraNest - Git Ignore Rules
+# Protects credentials and generated files from being committed to GitHub
+# =============================================================================
+
+# ---- Maven Build Outputs ----
+target/
+*.class
+*.jar
+
+# ---- Database Credentials (NEVER push to GitHub) ----
+src/main/resources/database/db.properties
+
+# ---- IDE Files ----
+.idea/
+*.iml
+*.ipr
+*.iws
+.settings/
+.classpath
+.project
+
+# ---- NetBeans ----
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# ---- OS Files ----
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- Logs ----
+*.log
+logs/
+
+# ---- Temporary Files ----
+*.tmp
+*.bak
+*.swp
+
+# Maven Shade Plugin auto-generated
+dependency-reduced-pom.xml
