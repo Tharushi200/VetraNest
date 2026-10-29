@@ -4,7 +4,6 @@ import com.vetranest.config.AppTheme;
 import com.vetranest.controller.AuthController;
 import com.vetranest.controller.DashboardController;
 import com.vetranest.model.User;
-import com.vetranest.util.ImageUtil;
 import com.vetranest.view.components.ModernCard;
 import com.vetranest.view.components.ModernTable;
 import com.vetranest.view.components.StatCard;

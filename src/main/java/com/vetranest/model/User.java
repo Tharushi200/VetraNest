@@ -3,7 +3,8 @@ package com.vetranest.model;
 import java.sql.Timestamp;
 
 /**
- * User Entity Model.
+ * User Entity Model representing system staff and administrators.
+ * Used for role-based access control, secure authentication, and password recovery.
  */
 public class User {
 
@@ -17,9 +18,21 @@ public class User {
     private String securityAnswer;
     private Timestamp createdAt;
 
+    /**
+     * Default constructor.
+     */
     public User() {
     }
 
+    /**
+     * Parameterized constructor for user authentication and creation.
+     *
+     * @param username     Unique account username
+     * @param passwordHash SHA-256 hashed password
+     * @param fullName     Full legal or display name of the user
+     * @param email        Contact email address
+     * @param role         System permission role (Admin, Receptionist, Staff)
+     */
     public User(String username, String passwordHash, String fullName, String email, String role) {
         this.username = username;
         this.passwordHash = passwordHash;

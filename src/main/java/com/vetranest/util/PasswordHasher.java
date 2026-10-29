@@ -10,6 +10,12 @@ import java.security.NoSuchAlgorithmException;
  */
 public class PasswordHasher {
 
+    /**
+     * Computes a cryptographic SHA-256 hash of a plain text password.
+     *
+     * @param rawPassword The raw, plain-text password
+     * @return Hexadecimal-encoded SHA-256 hash string, or null if input is null
+     */
     public static String hash(String rawPassword) {
         if (rawPassword == null) return null;
         try {
@@ -29,6 +35,13 @@ public class PasswordHasher {
         }
     }
 
+    /**
+     * Verifies if a raw password matches a stored SHA-256 hash.
+     *
+     * @param rawPassword The raw password attempt
+     * @param storedHash  The stored hexadecimal hash from the database
+     * @return true if matches, false otherwise
+     */
     public static boolean verify(String rawPassword, String storedHash) {
         if (rawPassword == null || storedHash == null) return false;
         String hashedRaw = hash(rawPassword);

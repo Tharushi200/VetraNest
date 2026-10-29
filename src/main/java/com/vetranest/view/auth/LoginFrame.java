@@ -14,12 +14,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
-import java.awt.geom.RoundRectangle2D;
 
 /**
- * Modern Two-Column Login Screen.
- * Left Side: Brand Logo, Illustration & Tagline.
- * Right Side: Modern Login Form with Role Switcher (Admin / Doctor) and Password Visibility Toggle.
+ * Modern Two-Column Login Screen for VetraNest.
+ * Left Side: Brand Logo, Illustration, and Clinic Tagline.
+ * Right Side: Modern Login Form with Username, Password, Visibility Toggle, and Authentication Handler.
  */
 public class LoginFrame extends JFrame {
 

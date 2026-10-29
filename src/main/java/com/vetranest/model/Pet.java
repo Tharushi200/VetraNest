@@ -21,9 +21,22 @@ public class Pet {
     private String color;
     private Timestamp createdAt;
 
+    /**
+     * Default constructor.
+     */
     public Pet() {
     }
 
+    /**
+     * Parameterized constructor for registering a clinical pet patient.
+     *
+     * @param petCode    Unique pet identifier code (e.g. P001)
+     * @param customerId Foreign key ID of pet's registered owner
+     * @param petName    Name of the pet
+     * @param species    Species classification (e.g. Dog, Cat, Bird)
+     * @param breed      Specific breed
+     * @param gender     Gender (Male, Female)
+     */
     public Pet(String petCode, int customerId, String petName, String species, String breed, String gender) {
         this.petCode = petCode;
         this.customerId = customerId;

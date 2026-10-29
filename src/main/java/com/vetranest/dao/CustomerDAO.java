@@ -22,6 +22,12 @@ public class CustomerDAO {
         this.dbConnection = DatabaseConnection.getInstance();
     }
 
+    /**
+     * Retrieves all registered customers sorted by customer ID ascending.
+     *
+     * @return List of Customer entities
+     * @throws SQLException if a database access error occurs
+     */
     public List<Customer> getAllCustomers() throws SQLException {
         List<Customer> list = new ArrayList<>();
         String sql = "SELECT * FROM customers ORDER BY customer_id ASC";
@@ -35,6 +41,13 @@ public class CustomerDAO {
         return list;
     }
 
+    /**
+     * Searches customers by matching keyword against code, name, email, or phone.
+     *
+     * @param keyword Partial search term
+     * @return List of matching Customer entities
+     * @throws SQLException if a database access error occurs
+     */
     public List<Customer> searchCustomers(String keyword) throws SQLException {
         List<Customer> list = new ArrayList<>();
         String sql = "SELECT * FROM customers WHERE LOWER(customer_code) LIKE ? OR LOWER(name) LIKE ? " +
@@ -56,6 +69,13 @@ public class CustomerDAO {
         return list;
     }
 
+    /**
+     * Retrieves a single customer by primary key ID.
+     *
+     * @param id The customer ID
+     * @return Customer entity if found, null otherwise
+     * @throws SQLException if a database access error occurs
+     */
     public Customer getCustomerById(int id) throws SQLException {
         String sql = "SELECT * FROM customers WHERE customer_id = ?";
         try (Connection conn = dbConnection.getConnection();
@@ -70,6 +90,13 @@ public class CustomerDAO {
         return null;
     }
 
+    /**
+     * Inserts a new customer record into the database.
+     *
+     * @param c The Customer entity to persist
+     * @return true if inserted successfully, false otherwise
+     * @throws SQLException if a database access error occurs
+     */
     public boolean insertCustomer(Customer c) throws SQLException {
         if (c.getCustomerCode() == null || c.getCustomerCode().trim().isEmpty()) {
             c.setCustomerCode(getNextCustomerCode());
@@ -97,6 +124,13 @@ public class CustomerDAO {
         return false;
     }
 
+    /**
+     * Updates an existing customer's contact and address details.
+     *
+     * @param c The Customer entity with updated fields
+     * @return true if updated successfully, false otherwise
+     * @throws SQLException if a database access error occurs
+     */
     public boolean updateCustomer(Customer c) throws SQLException {
         String sql = "UPDATE customers SET name = ?, email = ?, phone = ?, address = ? WHERE customer_id = ?";
         try (Connection conn = dbConnection.getConnection();
@@ -111,6 +145,13 @@ public class CustomerDAO {
         }
     }
 
+    /**
+     * Deletes a customer and cascades to related records.
+     *
+     * @param id The customer ID to delete
+     * @return true if deleted successfully, false otherwise
+     * @throws SQLException if a database access error occurs
+     */
     public boolean deleteCustomer(int id) throws SQLException {
         String sql = "DELETE FROM customers WHERE customer_id = ?";
         try (Connection conn = dbConnection.getConnection();
@@ -120,6 +161,11 @@ public class CustomerDAO {
         }
     }
 
+    /**
+     * Generates the next sequential customer formatted code (e.g., C001, C002).
+     *
+     * @return Formatted sequential code
+     */
     public String getNextCustomerCode() {
         String sql = "SELECT MAX(customer_id) FROM customers";
         try (Connection conn = dbConnection.getConnection();
@@ -135,6 +181,13 @@ public class CustomerDAO {
         return "C001";
     }
 
+    /**
+     * Maps an active ResultSet row to a Customer model object.
+     *
+     * @param rs ResultSet cursor positioned at a valid row
+     * @return Mapped Customer instance
+     * @throws SQLException if column reading fails
+     */
     private Customer mapResultSet(ResultSet rs) throws SQLException {
         Customer c = new Customer();
         c.setCustomerId(rs.getInt("customer_id"));

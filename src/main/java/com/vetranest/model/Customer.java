@@ -15,9 +15,21 @@ public class Customer {
     private String address;
     private Timestamp createdAt;
 
+    /**
+     * Default constructor.
+     */
     public Customer() {
     }
 
+    /**
+     * Parameterized constructor for creating a customer record.
+     *
+     * @param customerCode Unique client code (e.g., C001)
+     * @param name         Full name of client
+     * @param email        Contact email
+     * @param phone        Contact telephone number
+     * @param address      Residential / billing address
+     */
     public Customer(String customerCode, String name, String email, String phone, String address) {
         this.customerCode = customerCode;
         this.name = name;
